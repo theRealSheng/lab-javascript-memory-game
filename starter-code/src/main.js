@@ -27,6 +27,7 @@ var cards = [
 
 $(document).ready(function(){
   var memoryGame = new MemoryGame(cards);
+  memoryGame.shuffleCard(cards);
   var html = '';
   memoryGame.cards.forEach(function (pic, index) {
     html += '<div class= "card" id="card_' + pic.name + '">';
@@ -43,8 +44,23 @@ $(document).ready(function(){
   document.getElementById('memory_board').innerHTML = html;
   // Bind the click event of each element to a function
 $('.back').on('click', function () {
-   
-});
+  $(this).hide();
+  $(this).next().toggleClass('back');
+
+  var pickedCard = $(this).attr('name');
+
+  memoryGame.pickedCards.push(pickedCard);
+  if (memoryGame.pickedCards.length === 2) {
+    var isMatch = memoryGame.checkIfPair(memoryGame.pickedCards[0],memoryGame.pickedCards[1]);
+  } 
+
+  if (!isMatch){
+    setTimeout(() => {
+      $(this).show(0);
+      $(this).next().toggleClass('back');
+    }, 1000);
+  }
+
 });
 
-
+});
